@@ -11,6 +11,13 @@ jobs:
         run: brew install cmake
       - name: Install
         run: npm install
+      - name: Install node-gyp
+        run: npm install -g node-gyp 
+      - name: Configure node-gyp
+        run: |
+          cd node_modules/@u4/opencv4nodejs
+          node-gyp configure
+          cd ../../../
       - name: Build m1
         run: npm run install_arm64
       - name: Upload build files
