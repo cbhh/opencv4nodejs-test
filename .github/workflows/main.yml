@@ -1,0 +1,24 @@
+name: build opencv nodejs bindings
+run-name: build opencv nodejs bindings
+on: [workflow_dispatch]
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.3.0
+      - name: Cmake
+        run: brew install cmake
+      - name: Install
+        run: npm install
+      - name: Build m1
+        run: npm run install_arm64
+      - name: Upload build files
+        uses: hujiulong/action-qiniu-upload@master
+        with:
+          access_key: ${{ secrets.QINIU_ACCESS_KEY }}
+          secret_key: ${{ secrets.QINIU_SECRET_KEY }}
+          bucket: ${{ secrets.QINIU_BUCKET }}
+          source_dir: "node_modules/@u4/opencv4nodejs"
+          dest_dir: "/opencv4nodejs"
+          ignore_source_map: true
